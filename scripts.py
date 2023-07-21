@@ -53,11 +53,11 @@ def fix_marks(schoolkid):
 
 def create_commendation(name, subject):
     try:
-        schoolkid = Schoolkid.objects.get(full_name__contains=name)
+        schoolkid = check_schoolkid(name)
         try:
             subject = Subject.objects.get(year_of_study=schoolkid.year_of_study, title=subject)
             lessons = Lesson.objects.filter(subject=subject, year_of_study=schoolkid.year_of_study, group_letter=schoolkid.group_letter).order_by('-date')
-            lesson = random.choice(lessons)
+            lesson = lessons.first()
             commendation = random.choice(COMMENDATIONS)
             if lesson:
                 Commendation.objects.create(text=commendation, created=lesson.date, schoolkid=schoolkid, subject=lesson.subject, teacher=lesson.teacher)
